@@ -1,5 +1,6 @@
 package com.progWeb.SorteioOnline.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.progWeb.SorteioOnline.DTO.StatusSorteio;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,8 +24,10 @@ public class SorteioModel {
 
     @ManyToOne
     @JoinColumn(name = "criador_id")
+    @JsonIgnore
     private UserModel criador;
 
     @ManyToMany(mappedBy = "sorteiosParticipando")
+    @JsonIgnore
     private List<UserModel> participante = new ArrayList<>();
 }
