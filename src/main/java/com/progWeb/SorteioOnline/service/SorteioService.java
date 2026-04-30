@@ -1,10 +1,12 @@
 package com.progWeb.SorteioOnline.service;
 
+import com.progWeb.SorteioOnline.DTO.JWTUserData;
 import com.progWeb.SorteioOnline.DTO.request.SorteioRequestDTO;
 import com.progWeb.SorteioOnline.model.SorteioModel;
 import com.progWeb.SorteioOnline.model.UserModel;
 import com.progWeb.SorteioOnline.repository.SorteioRepository;
 import com.progWeb.SorteioOnline.repository.UserRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +41,15 @@ public class SorteioService {
 
     public Optional<SorteioModel> getSorteio(Long id){
         return sorteioRepository.findById(id);
+    }
+
+    public boolean deleteSorteio(Long idSorteio, JWTUserData userLogadoJWT){
+        Optional<SorteioModel> optSorteio = sorteioRepository.findById(idSorteio);
+
+        if(optSorteio.isEmpty() || !(optSorteio.get().getId().equals(userLogadoJWT.userId()))) {
+            return false;
+        }
+        sorteioRepository.deleteById(idSorteio);
+        return true;
     }
 }
