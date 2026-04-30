@@ -43,13 +43,31 @@ public class SorteioService {
         return sorteioRepository.findById(id);
     }
 
+    //testa isso dps
     public boolean deleteSorteio(Long idSorteio, JWTUserData userLogadoJWT){
-        Optional<SorteioModel> optSorteio = sorteioRepository.findById(idSorteio);
+        SorteioModel optSorteio = sorteioRepository.findById(idSorteio)
+                .orElseThrow(() -> new RuntimeException("user nao nao existente"));
 
-        if(optSorteio.isEmpty() || !(optSorteio.get().getId().equals(userLogadoJWT.userId()))) {
+        if(!(optSorteio.getId().equals(userLogadoJWT.userId()))) {
             return false;
         }
         sorteioRepository.deleteById(idSorteio);
+        return true;
+    }
+
+    //alterar se mais atributos em sorteioModel
+    public boolean atualiza(Long id, SorteioRequestDTO novoSorteio, JWTUserData userLogadoJWT){
+        SorteioModel sorteio = sorteioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("user nao nao existente"));
+
+        if(id.equals(userLogadoJWT.userId())){
+            return false;
+        }
+
+        sorteio.setNomeSorteio(novoSorteio.nome());
+        sorteio.setStatusSorteio(novoSorteio.status());
+
+        sorteioRepository.save(sorteio);
         return true;
     }
 }

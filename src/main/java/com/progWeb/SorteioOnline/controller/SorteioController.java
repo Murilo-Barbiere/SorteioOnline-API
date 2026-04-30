@@ -47,4 +47,15 @@ public class SorteioController {
         }
         return ResponseEntity.ok("User deletado");
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> alteraDadosSorteio(@PathVariable Long id,
+                                                     @RequestBody SorteioRequestDTO dados,
+                                                     @AuthenticationPrincipal JWTUserData userLogadoJWT){
+        boolean atualizado = sorteioService.atualiza(id, dados, userLogadoJWT);
+
+        if(!atualizado) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nao autorizado");
+
+        return ResponseEntity.ok("Sorteio atualizado com sucesso!");
+    }
 }
