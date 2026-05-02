@@ -1,5 +1,6 @@
 package com.progWeb.SorteioOnline.model;
 
+import com.progWeb.SorteioOnline.DTO.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -28,6 +29,9 @@ public class UsuarioModel implements UserDetails{
 
     @Column(nullable = false)
     private String senha;
+
+    @Column(nullable = false)
+    private Role role = Role.ROLE_ADMIN;
 
     @ManyToMany
     @JoinTable(

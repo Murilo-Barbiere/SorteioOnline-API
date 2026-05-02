@@ -2,6 +2,7 @@ package com.progWeb.SorteioOnline.service;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
 import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
+import com.progWeb.SorteioOnline.DTO.Role;
 import com.progWeb.SorteioOnline.DTO.request.RegisterRequestDTO;
 import com.progWeb.SorteioOnline.model.UsuarioModel;
 import com.progWeb.SorteioOnline.repository.UsuarioRepository;
@@ -32,7 +33,7 @@ public class UsuarioService {
     }
 
     public boolean deletaUsuario(Long id, JWTUserData jwtUserData){
-        if(!jwtUserData.userId().equals(id)) return false;
+        if(!(jwtUserData.userId().equals(id) || jwtUserData.role().equals("ROLE_ADMIN"))) return false;
 
         usuarioRepository.deleteById(id);
         return true;

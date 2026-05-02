@@ -19,6 +19,7 @@ public class TonkenConfig {
     public  String generateToken(UsuarioModel user){
         return JWT.create()
                 .withClaim("userId", user.getId())
+                .withClaim("role", String.valueOf(user.getRole()))
                 .withSubject(user.getEmail())
                 .withExpiresAt(Instant.now().plusSeconds(86400))
                 .withIssuedAt(Instant.now())
@@ -27,16 +28,16 @@ public class TonkenConfig {
     }
 
     public Optional<JWTUserData> validateToken(String token) {
-
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             DecodedJWT deCode = JWT.require(algorithm).build().verify(token);
 
             return Optional.of(new JWTUserData(
-                    deCode.getClaim("userId").asLong(),
-                    deCode.getSubject()
-                    ));
+                deCode.getClaim("userId").asLong(),
+                deCode.getSubject(),
+                deCode.getClaim("ROLE_ADMIN").asString()
+                ));
 
         }catch (JWTVerificationException e){
             return  Optional.empty();
