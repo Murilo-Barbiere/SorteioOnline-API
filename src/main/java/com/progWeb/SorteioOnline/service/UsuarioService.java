@@ -33,14 +33,18 @@ public class UsuarioService {
     }
 
     public boolean deletaUsuario(Long id, JWTUserData jwtUserData){
-        if(!(jwtUserData.userId().equals(id) || jwtUserData.role().equals("ROLE_ADMIN"))) return false;
+        if(!(jwtUserData.userId().equals(id) || jwtUserData.role().equals("ROLE_ADMIN"))){
+            throw new RuntimeException("Nao autorizado");
+        }
 
         usuarioRepository.deleteById(id);
         return true;
     }
 
     public void atualiza(Long id, JWTUserData jwtUserData, RegisterRequestDTO novosDados){
-        if(!jwtUserData.userId().equals(id)) throw new RuntimeException("Nao autorizado");
+        if(!(jwtUserData.userId().equals(id) || jwtUserData.role().equals("ROLE_ADMIN"))){
+            throw new RuntimeException("Nao autorizado");
+        }
 
         UsuarioModel newUser = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User nao encontrado"));

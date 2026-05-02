@@ -36,7 +36,7 @@ public class TonkenConfig {
             return Optional.of(new JWTUserData(
                 deCode.getClaim("userId").asLong(),
                 deCode.getSubject(),
-                deCode.getClaim("ROLE_ADMIN").asString()
+                deCode.getClaim("role").asString()
                 ));
 
         }catch (JWTVerificationException e){

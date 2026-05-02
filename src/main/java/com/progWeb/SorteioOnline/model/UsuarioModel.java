@@ -31,7 +31,7 @@ public class UsuarioModel implements UserDetails{
     private String senha;
 
     @Column(nullable = false)
-    private Role role = Role.ROLE_ADMIN;
+    private Role role = Role.ROLE_USER;
 
     @ManyToMany
     @JoinTable(
