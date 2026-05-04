@@ -1,6 +1,8 @@
 package com.progWeb.SorteioOnline.service;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
+import com.progWeb.SorteioOnline.DTO.Role;
+import com.progWeb.SorteioOnline.DTO.StatusSorteio;
 import com.progWeb.SorteioOnline.DTO.request.SorteioRequestDTO;
 import com.progWeb.SorteioOnline.model.SorteioModel;
 import com.progWeb.SorteioOnline.model.UsuarioModel;
@@ -67,5 +69,17 @@ public class SorteioService {
 
         sorteioRepository.save(sorteio);
         return true;
+    }
+
+    public void encerrar(Long idSorteio, JWTUserData userData){
+        SorteioModel sorteio = sorteioRepository.findById(idSorteio).
+                orElseThrow(() -> new RuntimeException("user nao nao existente"));
+
+        if(!(userData.userId().equals(idSorteio) || userData.role().equals("ROLE_ADMIN"))){
+            throw new RuntimeException("nao autorizado");
+        }
+
+        sorteio.setStatusSorteio(StatusSorteio.encerrado);
+        sorteioRepository.save(sorteio);
     }
 }

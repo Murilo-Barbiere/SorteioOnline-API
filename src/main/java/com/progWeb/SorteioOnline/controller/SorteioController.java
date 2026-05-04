@@ -59,4 +59,11 @@ public class SorteioController {
 
         return ResponseEntity.ok("Sorteio atualizado com sucesso!");
     }
+
+    @PatchMapping("encerrado/{id}")
+    public ResponseEntity<String> encerrarSorteio(@PathVariable("id") Long id,
+                                                      @AuthenticationPrincipal JWTUserData userData){
+        sorteioService.encerrar(id, userData);
+        return ResponseEntity.ok("sorteio encerrado");
+    }
 }
