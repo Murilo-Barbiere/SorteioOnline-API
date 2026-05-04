@@ -75,7 +75,7 @@ public class SorteioService {
         SorteioModel sorteio = sorteioRepository.findById(idSorteio).
                 orElseThrow(() -> new RuntimeException("user nao nao existente"));
 
-        if(!(userData.userId().equals(idSorteio) || userData.role().equals("ROLE_ADMIN"))){
+        if(!(userData.userId().equals(sorteio.getCriador().getId()) || userData.role().equals("ROLE_ADMIN"))){
             throw new RuntimeException("nao autorizado");
         }
 
