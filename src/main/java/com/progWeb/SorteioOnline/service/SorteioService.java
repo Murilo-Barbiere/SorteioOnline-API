@@ -24,7 +24,6 @@ public class SorteioService {
         this.userRepository = userRepository;
     }
 
-    //refatorar isso
     public SorteioModel addSorteio(JWTUserData jwtUserData, SorteioRequestDTO dadosSorteio){
         UsuarioModel criador = userRepository.findById(jwtUserData.userId())
                 .orElseThrow(() -> new RuntimeException("user nao encontrado"));
@@ -47,7 +46,7 @@ public class SorteioService {
 
     public boolean deleteSorteio(Long idSorteio, JWTUserData jwtUserData){
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
-                .orElseThrow(() -> new RuntimeException("user nao nao existente"));
+                .orElseThrow(() -> new RuntimeException("user nao existente"));
 
         if(!(jwtUserData.userId().equals(sorteio.getCriador().getId()) || jwtUserData.role().equals("ROLE_ADMIN"))){
             return false;
@@ -58,7 +57,7 @@ public class SorteioService {
 
     public boolean atualiza(Long id, SorteioRequestDTO novoSorteio, JWTUserData jwtUserData){
         SorteioModel sorteio = sorteioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("user nao nao existente"));
+                .orElseThrow(() -> new RuntimeException("user nao existente"));
 
         if(!(jwtUserData.userId().equals(sorteio.getCriador().getId()) || jwtUserData.role().equals("ROLE_ADMIN"))){
             return false;
@@ -73,7 +72,7 @@ public class SorteioService {
 
     public void encerrar(Long idSorteio, JWTUserData userData){
         SorteioModel sorteio = sorteioRepository.findById(idSorteio).
-                orElseThrow(() -> new RuntimeException("user nao nao existente"));
+                orElseThrow(() -> new RuntimeException("user nao existente"));
 
         if(!(userData.userId().equals(sorteio.getCriador().getId()) || userData.role().equals("ROLE_ADMIN"))){
             throw new RuntimeException("nao autorizado");
@@ -81,5 +80,16 @@ public class SorteioService {
 
         sorteio.setStatusSorteio(StatusSorteio.encerrado);
         sorteioRepository.save(sorteio);
+    }
+
+    public void participar(Long idSorteio, JWTUserData userData){
+        SorteioModel sorteio = sorteioRepository.findById(idSorteio).
+                orElseThrow(() -> new RuntimeException("sorteio nao existente"));
+
+        UsuarioModel novoParticipante = userRepository.findById(userData.userId())
+                .orElseThrow(() -> new RuntimeException("user nao existente"));
+
+        sorteio.getParticipante().add(novoParticipante);
+        novoParticipante.getSorteiosParticipando().add(sorteio);
     }
 }

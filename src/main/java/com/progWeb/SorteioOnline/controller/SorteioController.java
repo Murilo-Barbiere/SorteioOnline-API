@@ -62,8 +62,15 @@ public class SorteioController {
 
     @PatchMapping("encerrado/{id}")
     public ResponseEntity<String> encerrarSorteio(@PathVariable("id") Long id,
-                                                      @AuthenticationPrincipal JWTUserData userData){
+                                                  @AuthenticationPrincipal JWTUserData userData){
         sorteioService.encerrar(id, userData);
         return ResponseEntity.ok("sorteio encerrado");
+    }
+
+    @GetMapping("/participa/{id}")
+    public ResponseEntity<String> participarDoSorteio(@PathVariable("id") Long idSorteio,
+                                                      @AuthenticationPrincipal JWTUserData userData){
+        sorteioService.participar(idSorteio, userData);
+        return ResponseEntity.ok("participando");
     }
 }
