@@ -1,7 +1,7 @@
 package com.progWeb.SorteioOnline.service;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
-import com.progWeb.SorteioOnline.DTO.Role;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
 import com.progWeb.SorteioOnline.DTO.StatusSorteio;
 import com.progWeb.SorteioOnline.DTO.request.SorteioRequestDTO;
 import com.progWeb.SorteioOnline.model.SorteioModel;
@@ -9,6 +9,7 @@ import com.progWeb.SorteioOnline.model.UsuarioModel;
 import com.progWeb.SorteioOnline.repository.SorteioRepository;
 import com.progWeb.SorteioOnline.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -89,7 +90,28 @@ public class SorteioService {
         UsuarioModel novoParticipante = userRepository.findById(userData.userId())
                 .orElseThrow(() -> new RuntimeException("user nao existente"));
 
-        sorteio.getParticipante().add(novoParticipante);
+        boolean jaParticipa = novoParticipante.getSorteiosParticipando()
+                .stream()
+                .anyMatch(s -> s.getId().equals(idSorteio));
+        if(jaParticipa){
+            throw new RuntimeException("user ja participa do sorteio");
+        }
+
         novoParticipante.getSorteiosParticipando().add(sorteio);
+        userRepository.save(novoParticipante);
+    }
+
+    public List<UsuarioResposeDTO> getParticipantes(Long idSorteio, JWTUserData userData){
+        SorteioModel sorteio = sorteioRepository.findById(idSorteio)
+                .orElseThrow(() -> new RuntimeException("Sorteio nao existente"));
+
+        boolean isCriador = userData.userId().equals(sorteio.getCriador().getId());
+        boolean isAdmin   = userData.role().equals("ROLE_ADMIN");
+
+        if(!isCriador && !isAdmin){
+            throw new RuntimeException("nao autorizado");
+        }
+
+        return sorteioRepository.findParticipantes(idSorteio);
     }
 }

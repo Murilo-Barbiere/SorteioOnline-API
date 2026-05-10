@@ -1,6 +1,7 @@
 package com.progWeb.SorteioOnline.controller;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
 import com.progWeb.SorteioOnline.DTO.request.SorteioRequestDTO;
 import com.progWeb.SorteioOnline.model.SorteioModel;
 import com.progWeb.SorteioOnline.service.SorteioService;
@@ -68,9 +69,15 @@ public class SorteioController {
     }
 
     @GetMapping("/participa/{id}")
-    public ResponseEntity<String> participarDoSorteio(@PathVariable("id") Long idSorteio,
+    public ResponseEntity<String> getParticipantes(@PathVariable("id") Long idSorteio,
                                                       @AuthenticationPrincipal JWTUserData userData){
         sorteioService.participar(idSorteio, userData);
         return ResponseEntity.ok("participando");
+    }
+
+    @GetMapping("list_participantes/{id}")
+    public List<UsuarioResposeDTO> listaParticipantes(@PathVariable("id") Long idSorteio,
+                                                      @AuthenticationPrincipal JWTUserData userData){
+        return sorteioService.getParticipantes(idSorteio, userData);
     }
 }
