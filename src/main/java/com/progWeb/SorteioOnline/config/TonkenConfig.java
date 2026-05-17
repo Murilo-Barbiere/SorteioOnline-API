@@ -21,7 +21,7 @@ public class TonkenConfig {
                 .withClaim("userId", user.getId())
                 .withClaim("role", String.valueOf(user.getRole()))
                 .withSubject(user.getEmail())
-                .withExpiresAt(Instant.now().plusSeconds(86400))
+                .withExpiresAt(Instant.now().plusSeconds(1800))
                 .withIssuedAt(Instant.now())
                 .sign(algorithm)
         ;
