@@ -1,28 +1,61 @@
 services:
+
   postgresql:
-    container_name: 'meucontainer'
-    image: postgres
+    container_name: data-base
+    image: postgres:16-alpine
     restart: always
+
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: minhasenha
       POSTGRES_DB: meu_banco
+
     ports:
       - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d meu_banco"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
+    restart: always
+
     environment:
-      PGADMIN_DEFAULT_EMAIL: "seuemail@email.com"
-      PGADMIN_DEFAULT_PASSWORD: "senha1"
+      PGADMIN_DEFAULT_EMAIL: seuemail@email.com
+      PGADMIN_DEFAULT_PASSWORD: senha1
+
     ports:
       - "8090:80"
+
     depends_on:
       - postgresql
+
   api:
-    container_name: 'sorteio_online_api'
-    build: .
+    container_name: sorteio_online_api
+
+    build:
+      context: .
+
+    restart: always
+
     ports:
       - "8080:8080"
+
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
+
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/meu_banco
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/meu_banco
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: minhasenha
+
+volumes:
+  postgres_data:
