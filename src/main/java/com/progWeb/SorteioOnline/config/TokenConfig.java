@@ -54,7 +54,7 @@ public class TokenConfig {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
                     GsonFactory.getDefaultInstance()
-            ).setAudience(Collections.singletonList("SEU_CLIENT_ID")).build();
+            ).setAudience(Collections.singletonList("923197901865-70b6fpl6pou975uejhsq187bgecgia5v.apps.googleusercontent.com")).build();
 
             GoogleIdToken idToken = verifier.verify(token);
 
