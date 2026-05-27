@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
-    Optional<UserDetails> findUserByEmail(String username);
+    Optional<UserDetails> findUserByEmail(String email);
 
     @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(id, nome, email) " +
                     "FROM usuario")

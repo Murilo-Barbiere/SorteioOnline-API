@@ -4,7 +4,7 @@ import com.progWeb.SorteioOnline.DTO.Response.LoginResponseDTO;
 import com.progWeb.SorteioOnline.DTO.Response.RegisterResponseDTO;
 import com.progWeb.SorteioOnline.DTO.request.LoginRequestDTO;
 import com.progWeb.SorteioOnline.DTO.request.RegisterRequestDTO;
-import com.progWeb.SorteioOnline.config.TonkenConfig;
+import com.progWeb.SorteioOnline.config.TokenConfig;
 import com.progWeb.SorteioOnline.model.UsuarioModel;
 import com.progWeb.SorteioOnline.repository.UsuarioRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,13 +19,14 @@ public class AuthService {
     private UsuarioRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
-    private TonkenConfig tonkenConfig;
+    private TokenConfig tokenConfig;
 
-    public AuthService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TonkenConfig tonkenConfig) {
+    public AuthService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder,
+                       AuthenticationManager authenticationManager, TokenConfig tokenConfig) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
-        this.tonkenConfig = tonkenConfig;
+        this.tokenConfig = tokenConfig;
     }
 
     public LoginResponseDTO validaUser(LoginRequestDTO request){
@@ -33,7 +34,7 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(userPass);
 
         UsuarioModel user = (UsuarioModel) authentication.getPrincipal();
-        String token = tonkenConfig.generateToken(user);
+        String token = tokenConfig.generateToken(user);
         return new LoginResponseDTO(token);
     }
 
@@ -47,5 +48,14 @@ public class AuthService {
         userRepository.save(user);
 
         return new RegisterResponseDTO(user.getNome(), user.getEmail());
+    }
+
+    public String getTokenGoogleUserIsPresent(String token){
+        String email = tokenConfig.validarTokenGoogle(token);
+
+        UsuarioModel user = (UsuarioModel) userRepository.findUserByEmail(email)
+                .orElseThrow(()-> new RuntimeException("user nao registrado"));
+
+        return tokenConfig.generateToken(user);
     }
 }
