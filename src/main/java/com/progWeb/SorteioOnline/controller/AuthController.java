@@ -40,9 +40,12 @@ public class AuthController {
     @PostMapping("/google-login")
     public ResponseEntity<?> googleLogin(@RequestBody GoogleTokenRequest request) {
         String jwt = authService.getTokenGoogleUserIsPresent(request.token());
+        return ResponseEntity.ok(Map.of("token", jwt));
+    }
 
-        return ResponseEntity.ok(Map.of(
-                "token", jwt
-        ));
+    @PostMapping("/google-register")
+    public ResponseEntity<?> googleRegister(@RequestBody GoogleTokenRequest request){
+        String jwt = authService.cadastraTokenGoogleUser(request.token());
+        return ResponseEntity.ok(Map.of("token", jwt));
     }
 }

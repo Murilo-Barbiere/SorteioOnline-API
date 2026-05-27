@@ -27,7 +27,6 @@ public class UsuarioModel implements UserDetails{
     @Email
     private String email;
 
-    @Column(nullable = false)
     private String senha;
 
     @Column(nullable = false)

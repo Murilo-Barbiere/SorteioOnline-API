@@ -49,7 +49,7 @@ public class TokenConfig {
         }
     }
 
-    public String validarTokenGoogle(String token) {
+    public GoogleIdToken.Payload validarTokenGoogle(String token) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
@@ -62,9 +62,7 @@ public class TokenConfig {
                 throw new RuntimeException("Token inválido");
             }
 
-            GoogleIdToken.Payload payload = idToken.getPayload();
-
-            return payload.getEmail();
+            return idToken.getPayload();
 
         } catch (Exception e) {
             throw new RuntimeException(e);

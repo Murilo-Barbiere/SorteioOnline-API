@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/google-login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/google-register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/sorteio/**").permitAll()
                         .anyRequest().authenticated()
