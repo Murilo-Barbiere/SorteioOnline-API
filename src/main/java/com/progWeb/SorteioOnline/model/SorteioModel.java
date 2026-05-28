@@ -20,6 +20,8 @@ public class SorteioModel {
 
     private String nomeSorteio;
 
+    private String descricao;
+
     private StatusSorteio statusSorteio;
 
     @ManyToOne

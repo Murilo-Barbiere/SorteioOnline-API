@@ -18,6 +18,5 @@ public class ImagemModel {
     private String tipoArquivo;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
     private byte[] dados;
 }
