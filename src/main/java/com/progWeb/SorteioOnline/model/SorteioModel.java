@@ -30,4 +30,12 @@ public class SorteioModel {
     @ManyToMany(mappedBy = "sorteiosParticipando")
     @JsonIgnore
     private List<UsuarioModel> participantes = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "foto_capa_id")
+    private ImagemModel fotoCapa;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "sorteio_id")
+    private List<ImagemModel> fotos = new ArrayList<>();
 }

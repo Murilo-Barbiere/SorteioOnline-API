@@ -40,6 +40,10 @@ public class UsuarioModel implements UserDetails{
     )
     private List<SorteioModel> sorteiosParticipando = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "foto_perfil_id")
+    private ImagemModel fotoPerfil;
+
     //UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
