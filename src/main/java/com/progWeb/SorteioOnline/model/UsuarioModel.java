@@ -1,5 +1,6 @@
 package com.progWeb.SorteioOnline.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.progWeb.SorteioOnline.DTO.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -43,6 +44,7 @@ public class UsuarioModel implements UserDetails{
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "foto_perfil_id")
+    @JsonIgnore
     private ImagemModel fotoPerfil;
 
     //UserDetails

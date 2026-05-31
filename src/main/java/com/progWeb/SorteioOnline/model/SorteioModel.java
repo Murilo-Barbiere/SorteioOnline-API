@@ -35,9 +35,11 @@ public class SorteioModel {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "foto_capa_id")
+    @JsonIgnore
     private ImagemModel fotoCapa;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "sorteio_id")
+    @JsonIgnore
     private List<ImagemModel> fotos = new ArrayList<>();
 }
