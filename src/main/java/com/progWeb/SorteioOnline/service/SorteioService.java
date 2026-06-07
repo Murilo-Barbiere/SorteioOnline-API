@@ -19,15 +19,15 @@ import java.util.Random;
 @Service
 public class SorteioService {
 
-    private final UsuarioRepository usuarioRepository;
     private SorteioRepository sorteioRepository;
     private UsuarioRepository userRepository;
+    private EmailService emailService;
 
 
-    public SorteioService(SorteioRepository sorteioRepository, UsuarioRepository userRepository, UsuarioRepository usuarioRepository) {
+    public SorteioService(SorteioRepository sorteioRepository, UsuarioRepository userRepository, EmailService emailService) {
         this.sorteioRepository = sorteioRepository;
         this.userRepository = userRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.emailService = emailService;
     }
 
     public SorteioModel addSorteio(JWTUserData jwtUserData, SorteioRequestDTO dadosSorteio){
@@ -51,7 +51,7 @@ public class SorteioService {
     }
 
     public List<SorteioModel> SorteiosParticipando(JWTUserData userData){
-        UsuarioModel user = usuarioRepository.findById(userData.userId())
+        UsuarioModel user = userRepository.findById(userData.userId())
                 .orElseThrow(() -> new RuntimeException("user nao existente"));
 
         return user.getSorteiosParticipando();
@@ -168,6 +168,8 @@ public class SorteioService {
         sorteioRepository.save(sorteio);
 
         UsuarioModel userGanhador = sorteio.getParticipantes().get(random.nextInt(sorteio.getParticipantes().size()));
+
+        emailService.enviarEmailVencedor(userGanhador.getEmail(), userGanhador.getNome(), idSorteio, sorteio.getNomeSorteio());
 
         return new UsuarioResposeDTO(userGanhador.getId(), userGanhador.getNome(), userGanhador.getEmail());
     }
