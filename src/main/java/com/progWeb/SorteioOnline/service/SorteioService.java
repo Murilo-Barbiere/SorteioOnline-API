@@ -19,11 +19,13 @@ public class SorteioService {
 
     private SorteioRepository sorteioRepository;
     private UsuarioRepository userRepository;
+    private EmailService emailService;
 
 
-    public SorteioService(SorteioRepository sorteioRepository, UsuarioRepository userRepository) {
+    public SorteioService(SorteioRepository sorteioRepository, UsuarioRepository userRepository, EmailService emailService) {
         this.sorteioRepository = sorteioRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public SorteioModel addSorteio(JWTUserData jwtUserData, SorteioRequestDTO dadosSorteio){
@@ -136,6 +138,8 @@ public class SorteioService {
         sorteioRepository.save(sorteio);
 
         UsuarioModel userGanhador = sorteio.getParticipantes().get(random.nextInt(sorteio.getParticipantes().size()));
+
+        emailService.enviarEmailVencedor(userGanhador.getEmail(), userGanhador.getNome(), idSorteio, sorteio.getNomeSorteio());
 
         return new UsuarioResposeDTO(userGanhador.getId(), userGanhador.getNome(), userGanhador.getEmail());
     }
