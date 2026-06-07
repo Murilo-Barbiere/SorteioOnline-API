@@ -40,6 +40,11 @@ public class SorteioController {
         return ResponseEntity.of(sorteioService.getSorteio(id));
     }
 
+    @GetMapping("/participando")
+    public List<SorteioModel> participandoSorteio(@AuthenticationPrincipal JWTUserData userLogadoJWT){
+        return sorteioService.SorteiosParticipando(userLogadoJWT);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarSorteio(@PathVariable("id") Long idSorteio,
                                                  @AuthenticationPrincipal JWTUserData userLogadoJWT){
@@ -74,6 +79,14 @@ public class SorteioController {
                                                       @AuthenticationPrincipal JWTUserData userData){
         sorteioService.participar(idSorteio, userData);
         return ResponseEntity.ok("participando");
+    }
+
+    @GetMapping("/revome-participante/{idUsuarioRemove}/{idSorteio}")
+    public ResponseEntity<String> removeParticipante(@PathVariable Long idSorteio,
+                                   @PathVariable Long idUsuarioRemove,
+                                   @AuthenticationPrincipal JWTUserData userData){
+        sorteioService.removerParticipacao(idSorteio, idUsuarioRemove, userData);
+        return ResponseEntity.ok("removido");
     }
 
     @GetMapping("list_participantes/{id}")

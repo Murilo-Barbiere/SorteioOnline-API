@@ -9,7 +9,9 @@ import com.progWeb.SorteioOnline.model.UsuarioModel;
 import com.progWeb.SorteioOnline.repository.SorteioRepository;
 import com.progWeb.SorteioOnline.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -48,6 +50,13 @@ public class SorteioService {
         return sorteioRepository.findById(id);
     }
 
+    public List<SorteioModel> SorteiosParticipando(JWTUserData userData){
+        UsuarioModel user = userRepository.findById(userData.userId())
+                .orElseThrow(() -> new RuntimeException("user nao existente"));
+
+        return user.getSorteiosParticipando();
+    }
+
     public boolean deleteSorteio(Long idSorteio, JWTUserData jwtUserData){
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
                 .orElseThrow(() -> new RuntimeException("user nao existente"));
@@ -69,6 +78,7 @@ public class SorteioService {
 
         sorteio.setNomeSorteio(novoSorteio.nome());
         sorteio.setStatusSorteio(novoSorteio.status());
+        sorteio.setDescricao(novoSorteio.descricao());
 
         sorteioRepository.save(sorteio);
         return true;
@@ -102,6 +112,26 @@ public class SorteioService {
 
         novoParticipante.getSorteiosParticipando().add(sorteio);
         userRepository.save(novoParticipante);
+    }
+
+    @Transactional
+    public void removerParticipacao(Long idSorteio, Long idUserRemove, JWTUserData userData){
+
+        SorteioModel sorteio = sorteioRepository.findById(idSorteio)
+                .orElseThrow(() -> new RuntimeException("sorteio nao existente"));
+
+        if(!(userData.userId().equals(sorteio.getCriador().getId())
+                || userData.role().equals("ROLE_ADMIN"))){
+            throw new RuntimeException("nao autorizado");
+        }
+
+        UsuarioModel usuarioRemover = userRepository.findById(idUserRemove)
+                .orElseThrow(() -> new RuntimeException("usuario nao encontrado"));
+
+        usuarioRemover.getSorteiosParticipando()
+                .removeIf(s -> s.getId().equals(idSorteio));
+
+        userRepository.save(usuarioRemover);
     }
 
     public List<UsuarioResposeDTO> getParticipantes(Long idSorteio, JWTUserData userData){
