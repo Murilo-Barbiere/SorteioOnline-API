@@ -1,6 +1,7 @@
 package com.progWeb.SorteioOnline.config;
 
 import jakarta.servlet.DispatcherType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +24,9 @@ import java.util.List;
 public class SecurityConfig {
 
     private SecurityFilter securityFilter;
+
+    @Value("${cors.allowed.origins}")
+    private List<String> allowedOrigins;
 
     public SecurityConfig(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
@@ -53,7 +57,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500"));
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

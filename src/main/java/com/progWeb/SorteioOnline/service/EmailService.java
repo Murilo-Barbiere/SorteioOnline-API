@@ -4,11 +4,18 @@ import com.progWeb.SorteioOnline.config.ResendConfig;
 import com.resend.Resend;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
     private final Resend resend;
+
+    @Value("${email.from}")
+    private String emailFrom;
+
+    @Value("${app.base.url}")
+    private String appBaseUrl;
 
     public EmailService(Resend resend) {
         this.resend = resend;
@@ -21,7 +28,7 @@ public class EmailService {
                 "    \n" +
                 "    <p>Aqui estão os detalhes da sua vitória:</p>\n" +
                 "    <table style=\"width: 100%; border-collapse: collapse; margin: 20px 0;\">\n" +
-                "        tr>\n" +
+                "        <tr>\n" +
                 "            <td style=\"padding: 8px; border-bottom: 1px solid #eee;\"><strong>Sorteio:</strong></td>\n" +
                 "            <td style=\"padding: 8px; border-bottom: 1px solid #eee;\">#" + numeroSorteio + "</td>\n" +
                 "        </tr>\n" +
@@ -34,7 +41,7 @@ public class EmailService {
                 "    <p>Para resgatar o seu prêmio ou ver mais detalhes, basta acessar a sua conta na nossa plataforma clicando no botão abaixo:</p>\n" +
                 "    \n" +
                 "    <p style=\"margin: 30px 0; text-align: center;\">\n" +
-                "        <a href=\"https://sorteio.eifler.com.br/sorteio/\"" + numeroSorteio + "\n" +
+                "        <a href=\"" + appBaseUrl + numeroSorteio + "\"\n" +
                 "           style=\"background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;\">\n" +
                 "           Acessar Meu Prêmio\n" +
                 "        </a>\n" +
@@ -45,7 +52,7 @@ public class EmailService {
                 "</div>";
 
         CreateEmailOptions params = CreateEmailOptions.builder()
-                .from("Sorteio Online <sorteio@eifler.com.br>")
+                .from(emailFrom)
                 .to(emailVencedor)
                 .subject("Resultado do sorteio #" + numeroSorteio)
                 .html(html)
