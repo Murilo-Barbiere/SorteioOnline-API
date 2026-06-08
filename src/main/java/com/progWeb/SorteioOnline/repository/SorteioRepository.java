@@ -15,4 +15,7 @@ public interface SorteioRepository extends JpaRepository<SorteioModel, Long> {
             "JOIN s.participantes u " +
             "WHERE s.id = :idSorteio")
     List<UsuarioResposeDTO> findParticipantes(@Param("idSorteio") Long idSorteio);
+
+    @Query("SELECT s FROM sorteio s WHERE s.criador.id = :userId")
+    List<SorteioModel> findByCriadorId(@Param("userId") Long userId);
 }

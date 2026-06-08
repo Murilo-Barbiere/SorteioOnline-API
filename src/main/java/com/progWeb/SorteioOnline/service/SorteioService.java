@@ -120,8 +120,11 @@ public class SorteioService {
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
                 .orElseThrow(() -> new RuntimeException("sorteio nao existente"));
 
-        if(!(userData.userId().equals(sorteio.getCriador().getId())
-                || userData.role().equals("ROLE_ADMIN"))){
+        boolean ehOProprioUsuario = userData.userId().equals(idUserRemove);
+        boolean ehCriador         = userData.userId().equals(sorteio.getCriador().getId());
+        boolean ehAdmin            = userData.role().equals("ROLE_ADMIN");
+
+        if (!ehOProprioUsuario && !ehCriador && !ehAdmin) {
             throw new RuntimeException("nao autorizado");
         }
 
@@ -172,5 +175,9 @@ public class SorteioService {
         emailService.enviarEmailVencedor(userGanhador.getEmail(), userGanhador.getNome(), idSorteio, sorteio.getNomeSorteio());
 
         return new UsuarioResposeDTO(userGanhador.getId(), userGanhador.getNome(), userGanhador.getEmail());
+    }
+
+    public List<SorteioModel> sorteiosCriados(JWTUserData userData) {
+        return sorteioRepository.findByCriadorId(userData.userId());
     }
 }

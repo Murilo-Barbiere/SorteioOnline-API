@@ -100,4 +100,9 @@ public class SorteioController {
                                                        @AuthenticationPrincipal JWTUserData userData){
         return sorteioService.sortear(idSorteio, userData);
     }
+
+    @GetMapping("/criados")
+    public List<SorteioModel> sorteiosCriados(@AuthenticationPrincipal JWTUserData userData) {
+        return sorteioService.sorteiosCriados(userData);
+    }
 }
