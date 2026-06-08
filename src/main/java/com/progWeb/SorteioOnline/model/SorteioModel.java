@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +25,17 @@ public class SorteioModel {
 
     private StatusSorteio statusSorteio;
 
+    private LocalDateTime dataEncerramento;
+
     @ManyToOne
     @JoinColumn(name = "criador_id")
     @JsonIgnore
     private UsuarioModel criador;
+
+    @ManyToOne
+    @JoinColumn(name = "ganhador_id")
+    @JsonIgnore
+    private UsuarioModel ganhador;
 
     @ManyToMany(mappedBy = "sorteiosParticipando")
     @JsonIgnore

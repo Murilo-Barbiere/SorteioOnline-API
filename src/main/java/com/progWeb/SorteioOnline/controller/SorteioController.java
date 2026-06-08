@@ -105,4 +105,9 @@ public class SorteioController {
     public List<SorteioModel> sorteiosCriados(@AuthenticationPrincipal JWTUserData userData) {
         return sorteioService.sorteiosCriados(userData);
     }
+
+    @GetMapping("/ganhador/{idSorteio}")
+    public ResponseEntity<UsuarioResposeDTO> getGanhador(@PathVariable Long idSorteio) {
+        return ResponseEntity.ok(sorteioService.getGanhador(idSorteio));
+    }
 }

@@ -1,8 +1,9 @@
 package com.progWeb.SorteioOnline.DTO.request;
 
 import com.progWeb.SorteioOnline.DTO.StatusSorteio;
-import jakarta.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 public record SorteioRequestDTO(String nome,
                                 StatusSorteio status,
-                                String descricao) {}
+                                String descricao,
+                                LocalDateTime dataEncerramento) {}
