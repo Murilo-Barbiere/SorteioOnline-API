@@ -1,6 +1,5 @@
 package com.progWeb.SorteioOnline.service;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.progWeb.SorteioOnline.DTO.Response.LoginResponseDTO;
 import com.progWeb.SorteioOnline.DTO.Response.RegisterResponseDTO;
 import com.progWeb.SorteioOnline.DTO.request.LoginRequestDTO;
@@ -51,27 +50,16 @@ public class AuthService {
         return new RegisterResponseDTO(user.getNome(), user.getEmail());
     }
 
-    public String getTokenGoogleUserIsPresent(String token){
-        var payload = tokenConfig.validarTokenGoogle(token);
-        String email = payload.getEmail();
-
-        UsuarioModel user = (UsuarioModel) userRepository.findUserByEmail(email)
-                .orElseThrow(()-> new RuntimeException("user nao registrado"));
-
-        return tokenConfig.generateToken(user);
-    }
-
     public String cadastraTokenGoogleUser(String token){
         var payload = tokenConfig.validarTokenGoogle(token);
         String email = payload.getEmail();
         String nome = (String) payload.get("name");
 
-        UsuarioModel newUser = new UsuarioModel();
-        newUser.setNome(nome);
-        newUser.setEmail(email);
+        UsuarioModel user = new UsuarioModel();
+        user.setNome(nome);
+        user.setEmail(email);
+        userRepository.findUserByEmail(email).orElseGet(() -> userRepository.save(user));
 
-        userRepository.save(newUser);
-
-        return tokenConfig.generateToken(newUser);
+        return tokenConfig.generateToken(user);
     }
 }
