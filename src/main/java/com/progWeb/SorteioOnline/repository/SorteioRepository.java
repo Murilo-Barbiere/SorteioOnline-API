@@ -21,6 +21,16 @@ public interface SorteioRepository extends JpaRepository<SorteioModel, Long> {
     @Query("SELECT s FROM sorteio s WHERE s.criador.id = :userId")
     List<SorteioModel> findByCriadorId(@Param("userId") Long userId);
 
+    void deleteByCriadorId(Long userId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query("UPDATE sorteio s SET s.ganhador = NULL WHERE s.ganhador.id = :userId")
+    void nullifyGanhador(@Param("userId") Long userId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query(value = "DELETE FROM usuario_sorteio WHERE sorteio_id = :idSorteio", nativeQuery = true)
+    void deleteParticipacoes(@Param("idSorteio") Long idSorteio);
+
     @Query("SELECT s FROM sorteio s " +
             "WHERE s.statusSorteio = :status " +
             "AND s.dataEncerramento IS NOT NULL " +

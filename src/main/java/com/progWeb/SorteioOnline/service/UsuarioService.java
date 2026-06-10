@@ -5,9 +5,11 @@ import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
 import com.progWeb.SorteioOnline.DTO.Role;
 import com.progWeb.SorteioOnline.DTO.request.RegisterRequestDTO;
 import com.progWeb.SorteioOnline.model.UsuarioModel;
+import com.progWeb.SorteioOnline.repository.SorteioRepository;
 import com.progWeb.SorteioOnline.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +18,12 @@ import java.util.Optional;
 public class UsuarioService {
 
     private UsuarioRepository usuarioRepository;
+    private SorteioRepository sorteioRepository;
     private PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, SorteioRepository sorteioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.sorteioRepository = sorteioRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -32,10 +36,14 @@ public class UsuarioService {
         return usuarioRepository.findByUsuarioRespose(id);
     }
 
+    @Transactional
     public boolean deletaUsuario(Long id, JWTUserData jwtUserData){
         if(!(jwtUserData.userId().equals(id) || jwtUserData.role().equals("ROLE_ADMIN"))){
             throw new RuntimeException("Nao autorizado");
         }
+
+        sorteioRepository.nullifyGanhador(id);
+        sorteioRepository.deleteByCriadorId(id);
 
         usuarioRepository.deleteById(id);
         return true;

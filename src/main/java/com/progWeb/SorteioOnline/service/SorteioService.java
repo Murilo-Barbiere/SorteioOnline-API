@@ -69,14 +69,17 @@ public class SorteioService {
 
     // ── Deletar / Atualizar ───────────────────────────────────────────────────
 
+    @Transactional
     public boolean deleteSorteio(Long idSorteio, JWTUserData jwtUserData) {
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
-                .orElseThrow(() -> new RuntimeException("user nao existente"));
+                .orElseThrow(() -> new RuntimeException("sorteio nao existente"));
 
         if (!(jwtUserData.userId().equals(sorteio.getCriador().getId())
                 || jwtUserData.role().equals("ROLE_ADMIN"))) {
             return false;
         }
+
+        sorteioRepository.deleteParticipacoes(idSorteio);
         sorteioRepository.deleteById(idSorteio);
         return true;
     }
