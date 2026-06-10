@@ -88,6 +88,10 @@ public class SorteioService {
         SorteioModel sorteio = sorteioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("user nao existente"));
 
+        if(sorteio.getStatusSorteio().equals(StatusSorteio.encerrado)){
+            throw new RuntimeException("Edição não permitida: o sorteio já foi encerrado.");
+        }
+
         if (!(jwtUserData.userId().equals(sorteio.getCriador().getId())
                 || jwtUserData.role().equals("ROLE_ADMIN"))) {
             return false;
