@@ -13,11 +13,12 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     Optional<UserDetails> findUserByEmail(String username);
 
-    @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(id, nome, email) " +
-                    "FROM usuario")
+    @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO(id, nome, email, role) " +
+                    "FROM usuario u " +
+                    "WHERE u.role = 0")
     List<UsuarioResponseDTO> findAllByUsuarioRespose();
 
-    @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(u.id, u.nome, u.email, u.role) " +
+    @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO(u.id, u.nome, u.email, u.role) " +
                     "FROM usuario u WHERE u.id = :id")
     Optional<UsuarioResponseDTO> findByUsuarioRespose(@Param("id") Long id);
 }

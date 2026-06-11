@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface SorteioRepository extends JpaRepository<SorteioModel, Long> {
 
-    @Query("SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(u.id, u.nome, u.email) " +
+    @Query("SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO(u.id, u.nome, u.email, u.role) " +
             "FROM sorteio s " +
             "JOIN s.participantes u " +
             "WHERE s.id = :idSorteio")

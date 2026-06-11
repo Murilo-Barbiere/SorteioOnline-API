@@ -199,7 +199,7 @@ public class SorteioService {
         }
 
         UsuarioModel g = sorteio.getGanhador();
-        return new UsuarioResponseDTO(g.getId(), g.getNome(), g.getEmail());
+        return new UsuarioResponseDTO(g.getId(), g.getNome(), g.getEmail(), g.getRole());
     }
 
     public List<UsuarioResponseDTO> getParticipantes(Long idSorteio, JWTUserData userData) {
@@ -259,7 +259,8 @@ public class SorteioService {
         return new UsuarioResponseDTO(
                 userGanhador.getId(),
                 userGanhador.getNome(),
-                userGanhador.getEmail()
+                userGanhador.getEmail(),
+                userGanhador.getRole()
         );
     }
 }
