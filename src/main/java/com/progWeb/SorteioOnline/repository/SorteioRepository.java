@@ -1,6 +1,6 @@
 package com.progWeb.SorteioOnline.repository;
 
-import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO;
 import com.progWeb.SorteioOnline.DTO.StatusSorteio;
 import com.progWeb.SorteioOnline.model.SorteioModel;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +16,7 @@ public interface SorteioRepository extends JpaRepository<SorteioModel, Long> {
             "FROM sorteio s " +
             "JOIN s.participantes u " +
             "WHERE s.id = :idSorteio")
-    List<UsuarioResposeDTO> findParticipantes(@Param("idSorteio") Long idSorteio);
+    List<UsuarioResponseDTO> findParticipantes(@Param("idSorteio") Long idSorteio);
 
     @Query("SELECT s FROM sorteio s WHERE s.criador.id = :userId")
     List<SorteioModel> findByCriadorId(@Param("userId") Long userId);

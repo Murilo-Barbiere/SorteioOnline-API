@@ -1,7 +1,7 @@
 package com.progWeb.SorteioOnline.service;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
-import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO;
 import com.progWeb.SorteioOnline.DTO.StatusSorteio;
 import com.progWeb.SorteioOnline.DTO.request.SorteioRequestDTO;
 import com.progWeb.SorteioOnline.model.SorteioModel;
@@ -167,7 +167,7 @@ public class SorteioService {
         userRepository.save(usuarioRemover);
     }
 
-    public UsuarioResposeDTO sortear(Long idSorteio, JWTUserData userData) {
+    public UsuarioResponseDTO sortear(Long idSorteio, JWTUserData userData) {
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
                 .orElseThrow(() -> new RuntimeException("Sorteio nao existente"));
 
@@ -190,7 +190,7 @@ public class SorteioService {
         return executarSorteio(sorteio);
     }
 
-    public UsuarioResposeDTO getGanhador(Long idSorteio) {
+    public UsuarioResponseDTO getGanhador(Long idSorteio) {
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
                 .orElseThrow(() -> new RuntimeException("Sorteio nao encontrado"));
 
@@ -199,10 +199,10 @@ public class SorteioService {
         }
 
         UsuarioModel g = sorteio.getGanhador();
-        return new UsuarioResposeDTO(g.getId(), g.getNome(), g.getEmail());
+        return new UsuarioResponseDTO(g.getId(), g.getNome(), g.getEmail());
     }
 
-    public List<UsuarioResposeDTO> getParticipantes(Long idSorteio, JWTUserData userData) {
+    public List<UsuarioResponseDTO> getParticipantes(Long idSorteio, JWTUserData userData) {
         SorteioModel sorteio = sorteioRepository.findById(idSorteio)
                 .orElseThrow(() -> new RuntimeException("Sorteio nao existente"));
 
@@ -239,7 +239,7 @@ public class SorteioService {
         }
     }
 
-    private UsuarioResposeDTO executarSorteio(SorteioModel sorteio) {
+    private UsuarioResponseDTO executarSorteio(SorteioModel sorteio) {
         Random random = new Random();
 
         UsuarioModel userGanhador = sorteio.getParticipantes()
@@ -256,7 +256,7 @@ public class SorteioService {
                 sorteio.getNomeSorteio()
         );
 
-        return new UsuarioResposeDTO(
+        return new UsuarioResponseDTO(
                 userGanhador.getId(),
                 userGanhador.getNome(),
                 userGanhador.getEmail()

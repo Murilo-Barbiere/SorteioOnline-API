@@ -1,8 +1,7 @@
 package com.progWeb.SorteioOnline.service;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
-import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
-import com.progWeb.SorteioOnline.DTO.Role;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO;
 import com.progWeb.SorteioOnline.DTO.request.RegisterRequestDTO;
 import com.progWeb.SorteioOnline.model.UsuarioModel;
 import com.progWeb.SorteioOnline.repository.SorteioRepository;
@@ -27,12 +26,12 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<UsuarioResposeDTO> getAll(){
+    public List<UsuarioResponseDTO> getAll(){
         return usuarioRepository.findAllByUsuarioRespose();
 
     }
 
-    public Optional<UsuarioResposeDTO> getUser(Long id){
+    public Optional<UsuarioResponseDTO> getUser(Long id){
         return usuarioRepository.findByUsuarioRespose(id);
     }
 
