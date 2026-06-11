@@ -1,10 +1,9 @@
 package com.progWeb.SorteioOnline.controller;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
-import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO;
 import com.progWeb.SorteioOnline.DTO.request.SorteioRequestDTO;
 import com.progWeb.SorteioOnline.model.SorteioModel;
-import com.progWeb.SorteioOnline.model.UsuarioModel;
 import com.progWeb.SorteioOnline.service.SorteioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,14 +89,14 @@ public class SorteioController {
     }
 
     @GetMapping("list_participantes/{id}")
-    public List<UsuarioResposeDTO> listaParticipantes(@PathVariable("id") Long idSorteio,
-                                                      @AuthenticationPrincipal JWTUserData userData){
+    public List<UsuarioResponseDTO> listaParticipantes(@PathVariable("id") Long idSorteio,
+                                                       @AuthenticationPrincipal JWTUserData userData){
         return sorteioService.getParticipantes(idSorteio, userData);
     }
 
     @GetMapping("/sortear/{id}")
-    public UsuarioResposeDTO sortearUsuairo(@PathVariable("id") Long idSorteio,
-                                                       @AuthenticationPrincipal JWTUserData userData){
+    public UsuarioResponseDTO sortearUsuairo(@PathVariable("id") Long idSorteio,
+                                             @AuthenticationPrincipal JWTUserData userData){
         return sorteioService.sortear(idSorteio, userData);
     }
 
@@ -107,7 +106,7 @@ public class SorteioController {
     }
 
     @GetMapping("/ganhador/{idSorteio}")
-    public ResponseEntity<UsuarioResposeDTO> getGanhador(@PathVariable Long idSorteio) {
+    public ResponseEntity<UsuarioResponseDTO> getGanhador(@PathVariable Long idSorteio) {
         return ResponseEntity.ok(sorteioService.getGanhador(idSorteio));
     }
 }

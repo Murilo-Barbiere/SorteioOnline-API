@@ -1,6 +1,6 @@
 package com.progWeb.SorteioOnline.repository;
 
-import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO;
 import com.progWeb.SorteioOnline.model.UsuarioModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,9 +15,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
 
     @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(id, nome, email) " +
                     "FROM usuario")
-    List<UsuarioResposeDTO> findAllByUsuarioRespose();
+    List<UsuarioResponseDTO> findAllByUsuarioRespose();
 
-    @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(u.id, u.nome, u.email) " +
+    @Query(value = "SELECT new com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO(u.id, u.nome, u.email, u.role) " +
                     "FROM usuario u WHERE u.id = :id")
-    Optional<UsuarioResposeDTO> findByUsuarioRespose(@Param("id") Long id);
+    Optional<UsuarioResponseDTO> findByUsuarioRespose(@Param("id") Long id);
 }

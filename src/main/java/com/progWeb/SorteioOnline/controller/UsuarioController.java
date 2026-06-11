@@ -1,7 +1,7 @@
 package com.progWeb.SorteioOnline.controller;
 
 import com.progWeb.SorteioOnline.DTO.JWTUserData;
-import com.progWeb.SorteioOnline.DTO.Response.UsuarioResposeDTO;
+import com.progWeb.SorteioOnline.DTO.Response.UsuarioResponseDTO;
 import com.progWeb.SorteioOnline.DTO.request.RegisterRequestDTO;
 import com.progWeb.SorteioOnline.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -21,12 +21,12 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<UsuarioResposeDTO> listaUsuarios(){
+    public List<UsuarioResponseDTO> listaUsuarios(){
         return usuarioService.getAll();
     }
 
     @GetMapping("/{id}")
-    public UsuarioResposeDTO mostraUsuario(@PathVariable Long id){
+    public UsuarioResponseDTO mostraUsuario(@PathVariable Long id){
         return usuarioService.getUser(id).orElseThrow(() -> new RuntimeException("erro"));
     }
 
